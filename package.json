@@ -1,0 +1,26 @@
+{
+  "name": "nhs-checkin",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jacksonchen/nhs-checkin.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "config": "^1.14.0",
+    "lodash": "^3.10.1",
+    "mongodb": "^2.0.25",
+    "readline-sync": "^1.2.19"
+  },
+  "bugs": {
+    "url": "https://github.com/jacksonchen/nhs-checkin/issues"
+  },
+  "homepage": "https://github.com/jacksonchen/nhs-checkin#readme"
+}
