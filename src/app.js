@@ -4,7 +4,7 @@ var readlineSync = require('readline-sync'),
 var fs = require('fs'),
     config = require('config');
 
-var accessDB = function(studentID) {
+var accessDB = function(ID) {
   var hostName = config.get('db.hostname'),
       portNumber = config.get('db.port'),
       dbName = config.get('db.dbname'),
@@ -49,8 +49,8 @@ var readInput = function(collection) {
   }
 }
 
-var findDoc = function(studentID, collection, callback) {
-  collection.find({'studentID': studentID}).toArray(function(err, docs) {
+var findDoc = function(ID, collection, callback) {
+  collection.find({'ID': ID}).toArray(function(err, docs) {
     assert.equal(err, null);
     if (docs.length == 0) {
       console.error("Student not found.");
@@ -58,7 +58,7 @@ var findDoc = function(studentID, collection, callback) {
     }
     else {
       name = docs[0].name
-      collection.update({'studentID': studentID }, {name: name, 'studentID': studentID, checkedin: true}, { upsert: true }, function(err, docs) {
+      collection.update({'ID': ID }, {name: name, 'ID': ID, checkedin: true}, { upsert: true }, function(err, docs) {
         assert.equal(err, null);
         console.log(name + " was successfully checked in.")
         callback();

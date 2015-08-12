@@ -26,7 +26,7 @@ If you're on Fairview's NHS Leadership Team, please contact Jackson for the conf
 
 Set up a MongoDB server where the keys in a collection consist of a `name`, `organization_id`, and `checkin` status.
 
-Start the program with `npm start`. From there type `help` into the CLI will bring up a list of commands you can use.
+Start the program with `npm start`. From there type `help` into the CLI to bring up a list of commands you can use.
 
 ## License
 
