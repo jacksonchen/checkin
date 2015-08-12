@@ -1,6 +1,6 @@
 # Checkin Script
 
-This script allows for members of any organization to check-in to meetings.
+This script allows for members of any organization to check-in to meetings or events.
 
 ## Setup
 
@@ -14,7 +14,8 @@ You will need a configuration file called `default.json` in a config folder to c
     "hostname": "",
     "port": "",
     "dbname": "",
-    "collection": ""
+    "memberscollection": "",
+    "eventscollection": ""
   }
 }
 
@@ -24,9 +25,9 @@ If you're on Fairview's NHS Leadership Team, please contact Jackson for the conf
 
 ## Usage
 
-Set up a MongoDB server where the keys in a collection consist of a `name`, `organization_id`, and `checkin` status.
+Set up a MongoDB server where the keys in a collection consist of `name` and `id`. Enter all of your members into the database.
 
-Start the program with `npm start`. From there type `help` into the CLI to bring up a list of commands you can use.
+Start the program with `npm start`. From there type `help` into the CLI to bring up a list of commands that you can use.
 
 ## License
 
