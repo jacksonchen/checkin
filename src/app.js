@@ -3,6 +3,7 @@ var readlineSync = require('readline-sync'),
     assert = require('assert');
 var fs = require('fs'),
     config = require('config'),
+    lineReader = require('line-reader'),
     event = null;
 
 var accessDB = function() {
@@ -43,6 +44,7 @@ var readInput = function(memberscollection, eventscollection) {
   else if (response === "help") {
     console.log("event <eventName|all>: Type an eventname to change the event. All to show all events. If blank, shows the current event.");
     console.log("<student id>: Changes a student's checkin status to true.");
+    console.log("add <file>: Adds comma delimited file of students into db");
     console.log("reset: Changes all students' checkin statuses in the current event to false.");
     console.log("stop: Ends the program.");
     readInput(memberscollection, eventscollection);
@@ -84,6 +86,11 @@ var readInput = function(memberscollection, eventscollection) {
     }
 
   }
+  else if (response.substring(0,3) === "add") {
+    addFile(memberscollection, response.substring(3), function() {
+      readInput(memberscollection, eventscollection);
+    })
+  }
   else {
     if (event === null) {
       console.log("Please set an event before checking in members.");
@@ -106,6 +113,18 @@ var resetEvent = function(memberscollection, event, callback) {
     console.log("Every student's checkin status reset.")
     callback();
   })
+}
+
+var addFile = function(memberscollection, file, callback) {
+  lineReader.eachLine(file, function(line, last) {
+    var name = line.split(',')[0],
+        id = line.split(',')[1];
+    memberscollection.insert({name: name, ID: id, induction: false}, function(err, docs) {
+      if (last) {
+        callback();
+      }
+    })
+  });
 }
 
 var findMember = function(ID, memberscollection, callback) {

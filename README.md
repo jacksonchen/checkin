@@ -21,8 +21,6 @@ You will need a configuration file called `default.json` in a config folder to c
 
 ```
 
-If you're on Fairview's NHS Leadership Team, please contact Jackson for the config file.
-
 ## Usage
 
 Set up a MongoDB server where the keys in a collection consist of `name` and `id`. Enter all of your members into the database.
