@@ -45,9 +45,35 @@ var readInput = function(memberscollection, eventscollection) {
     console.log("event <eventName|all>: Type an eventname to change the event. All to show all events. If blank, shows the current event.");
     console.log("<student id>: Changes a student's checkin status to true.");
     console.log("add <file>: Adds comma delimited file of students into db");
+    console.log("output: Outputs which members were present and which weren't into a CSV file");
     console.log("reset: Changes all students' checkin statuses in the current event to false.");
     console.log("stop: Ends the program.");
     readInput(memberscollection, eventscollection);
+  }
+  else if (response === "output") {
+    if (event === null) {
+      console.log("Please select an event first");
+      readInput(memberscollection, eventscollection);
+    }
+    else {
+      var query = {},
+          absent = [],
+          present = [];
+      query[event] = false;
+      memberscollection.find(query).toArray(function(err, docs) {
+        absent = docs.map(function(val) { return val.name });
+        query[event] = true;
+        memberscollection.find(query).toArray(function(err, res) {
+          present = res.map(function(val) { return val.name });
+          fs.writeFile("absent.txt", absent, function() {
+            fs.writeFile("present.txt", present, function() {
+              readInput(memberscollection, eventscollection);
+            })
+          })
+        });
+
+      })
+    }
   }
   else if (response.substring(0,5) === "event") {
     if (response.length <= 6) {
@@ -116,7 +142,7 @@ var resetEvent = function(memberscollection, event, callback) {
 }
 
 var addFile = function(memberscollection, file, callback) {
-  lineReader.eachLine(file, function(line, last) {
+  lineReader.eachLine('id.txt', function(line, last) {
     var name = line.split(',')[0],
         id = line.split(',')[1];
     memberscollection.insert({name: name, ID: id, induction: false}, function(err, docs) {
