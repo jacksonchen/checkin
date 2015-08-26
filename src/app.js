@@ -65,8 +65,8 @@ var readInput = function(memberscollection, eventscollection) {
         query[event] = true;
         memberscollection.find(query).toArray(function(err, res) {
           present = res.map(function(val) { return val.name });
-          fs.writeFile("absent.txt", absent, function() {
-            fs.writeFile("present.txt", present, function() {
+          fs.writeFile("absent.csv", absent, function() {
+            fs.writeFile("present.csv", present, function() {
               readInput(memberscollection, eventscollection);
             })
           })
@@ -88,25 +88,33 @@ var readInput = function(memberscollection, eventscollection) {
         readInput(memberscollection, eventscollection);
       });
     }
+    else if (response.substring(6,9) === "add") {
+      eventscollection.insert({name: event}, function(err, docs) {
+        assert.equal(err, null);
+        event = response.substring(11);
+        resetEvent(memberscollection, event, function() {
+          console.log("Created new event " + event);
+          console.log("Switched to event " + event);
+          readInput(memberscollection, eventscollection);
+        });
+      });
+    }
+    else if (response.substring(6,11) === "delete") {
+      console.log("Feature coming soon");
+      // memberscollection.update({}, $unset: )
+    }
     else {
-      event = response.substring(6);
       eventscollection.find({name: event}).toArray(function(err, docs) {
         assert.equal(err, null)
         if (docs.length === 0) {
-          eventscollection.insert({name: event}, function(err, docs) {
-            assert.equal(err, null);
-            resetEvent(memberscollection, event, function() {
-              console.log("Created new event " + event);
-              console.log("Switched to event " + event);
-              readInput(memberscollection, eventscollection);
-            });
-          });
+          console.log("Event not found");
+          readInput(memberscollection, eventscollection);
         }
         else {
+          event = response.substring(6);
           console.log("Switched to event " + event);
           readInput(memberscollection, eventscollection);
         }
-
       })
 
     }
