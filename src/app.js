@@ -104,7 +104,7 @@ var readInput = function(memberscollection, eventscollection) {
       // memberscollection.update({}, $unset: )
     }
     else {
-      eventscollection.find({name: event}).toArray(function(err, docs) {
+      eventscollection.find({name: response.substring(6)}).toArray(function(err, docs) {
         assert.equal(err, null)
         if (docs.length === 0) {
           console.log("Event not found");
