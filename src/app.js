@@ -89,9 +89,9 @@ var readInput = function(memberscollection, eventscollection) {
       });
     }
     else if (response.substring(6,9) === "add") {
+      event = response.substring(10);
       eventscollection.insert({name: event}, function(err, docs) {
         assert.equal(err, null);
-        event = response.substring(11);
         resetEvent(memberscollection, event, function() {
           console.log("Created new event " + event);
           console.log("Switched to event " + event);
@@ -99,9 +99,15 @@ var readInput = function(memberscollection, eventscollection) {
         });
       });
     }
-    else if (response.substring(6,11) === "delete") {
-      console.log("Feature coming soon");
-      // memberscollection.update({}, $unset: )
+    else if (response.substring(6,12) === "delete") {
+      eventscollection.remove({name: response.substring(13)}, function(err, docs) {
+        console.log("Deleted Event");
+        var dontset = {};
+        dontset[response.substring(13)] = "";
+        memberscollection.update({}, {$unset: dontset}, {multi: true}, function(err, docs) {
+          readInput(memberscollection, eventscollection);
+        })
+      })
     }
     else {
       eventscollection.find({name: response.substring(6)}).toArray(function(err, docs) {
@@ -131,9 +137,11 @@ var readInput = function(memberscollection, eventscollection) {
       readInput(memberscollection, eventscollection);
     }
     else {
-      findMember(response, memberscollection, function() {
-        readInput(memberscollection, eventscollection);
-      });
+      fs.appendFile(event + '.csv', response + "\n", function() {
+        findMember(response, memberscollection, function() {
+          readInput(memberscollection, eventscollection);
+        });
+      })
     }
   }
 }
